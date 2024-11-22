@@ -1,0 +1,47 @@
+.tree-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px;
+}
+
+.tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+.node-content {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.children {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.node-content p {
+  margin: 0;
+}
+
+.children .tree-node {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.node-content {
+  transition: transform 0.3s ease-in-out;
+}
+
+.node-content:hover {
+  transform: scale(1.1);
+}

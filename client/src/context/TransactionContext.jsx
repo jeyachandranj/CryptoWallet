@@ -111,10 +111,23 @@ const switchNetwork = async () => {
 };
 
 
+
 export const TransactionsProvider = ({ children }) => {
+  let method = localStorage.getItem("method");
+//   let address = String(allData.walletaddress);
+// let binary = String(allData.binary);
+// let matrix = String(allData.matrix);
+  console.log("method", method);
+  let amount = "0.53"; 
+  if (method === 'binary') {
+    amount = "0.11"; 
+  } else if (method === 'matrix') {
+    amount = "0.53"; 
+  }
+
   const [formData, setFormData] = useState({
     addressTo1: "0xa06D78837e5dFBd09C5Be990832C5d3f13a604c1",
-    amount1: "0.103",
+    amount1: amount,
     message: "Convenience Charge",
   });
   const [currentAccount, setCurrentAccount] = useState("");
@@ -122,11 +135,15 @@ export const TransactionsProvider = ({ children }) => {
   const [transactionCount, setTransactionCount] = useState(
     localStorage.getItem("transactionCount")
   );
+
+  const [fetchedAmount,setFetchedamount] = useState();
+  const [fetchedWallet,setWallet]= useState()
   const [transactions, setTransactions] = useState([]);
   const [referencs_id, setReference_id] = useState("0");
   const [payment, setPayment] = useState(false);
   const [checkBalance, SetCheckBalance] = useState(false);
   const [TokenTxn, setTokenTxn] = useState(false);
+
 
   const name = localStorage.getItem("name");
 
@@ -275,7 +292,7 @@ export const TransactionsProvider = ({ children }) => {
     const fetchAccountDetails = async () => {
       try {
         const response = await fetch(
-          "https://cryptowallet-2.onrender.com/api/account"
+          "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/account"
         );
         const data = await response.json();
         setReference_id(data.referralId);
@@ -286,12 +303,30 @@ export const TransactionsProvider = ({ children }) => {
     fetchAccountDetails();
   }, []);
 
+  useEffect(() => {
+   const getAllData = async () => {
+     try {
+       const response = await axios.get(
+         "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/getalldata"
+       );
+       console.log(response.data); // Logs the actual data from the response
+       setFetchedamount(response.data[0].matrix)
+       console.log(response.data)
+       setWallet(response.data[0].walletaddress)
+     } catch (error) {
+       console.log("Error fetching data:", error);
+     }
+   };
+
+    getAllData()
+  },[])
+
   console.log(referencs_id);
 
   const handleTokenTxnChange = async () => {
     try {
       const response = await fetch(
-        "https://cryptowallet-2.onrender.com/storeTokenTxn",
+        "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/storeTokenTxn",
         {
           method: "POST",
           headers: {
@@ -313,87 +348,8 @@ export const TransactionsProvider = ({ children }) => {
     setTokenTxn((prev) => !prev);
   };
 
-  // const createPayoutApi = async () => {
-  //   try {
-  //     const payoutData = {
-  //       currency: 'INR', // Adjust as needed
-  //       mode: 'IMPS', // Mode of transfer, e.g., IMPS, UPI, etc.
-  //       purpose: 'refund', // Adjust the purpose of the payout
-  //       queue_if_low_balance: true, // Queue if balance is low
-  //       randomId: referencs_id, // Reference ID matching in the DB
-  //       narration: 'Acme Corp Fund Transfer', // Optional narration
-  //     };
 
-  //     const response = await axios.post('http://localhost:5000/create-payout', payoutData);
-
-  //     console.log('Payout successful:', response.data);
-  //     alert('Payout created successfully!');
-  //     setPayment(true)
-  //   } catch (error) {
-  //     console.error('Error creating payout:', error.response?.data || error.message);
-  //     alert('Failed to create payout. Please try again.');
-  //   }
-  // };
-
-  // const sendTransactions = async () => {
-
-  //   try {
-  //     if (ethereum) {
-  //       const { addressTo, amount, keyword, message } = formData;
-  //       const transactionsContract = createEthereumContract();
-  //       const parsedAmount = ethers.utils.parseEther(amount);
-
-  //       await ethereum.request({
-  //         method: "eth_sendTransaction",
-  //         params: [{
-  //           from: currentAccount,
-  //           to: addressTo,
-  //           gas: "0x5208",
-  //           value: parsedAmount._hex,
-  //         }],
-  //       });
-
-  //       const transactionHash = await transactionsContract.addToBlockchain(addressTo, parsedAmount, message, keyword);
-
-  //       setIsLoading(true);
-  //       console.log(`Loading - ${transactionHash.hash}`);
-  //       await transactionHash.wait();
-  //       console.log(`Success - ${transactionHash.hash}`);
-
-  //       setIsLoading(false);
-
-  //     //  await createPayoutApi()
-  //        const transactionsCount = await transactionsContract.getTransactionCount();
-
-  //       setTransactionCount(transactionsCount.toNumber());
-
-  //       window.location.reload();
-  //     } else {
-  //       console.log("No ethereum object");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating payout:", error);
-  //   }
-  // };
-
-  const sendReffereAmount = async () => {
-    try {
-      const referrerDetails = {
-        name: "Referrer Name",
-        contactNumber: "Referrer Contact Number",
-        email: "Referrer Email",
-        accountNumber: "Referrer Account Number",
-        ifsc: "Referrer IFSC Code",
-      };
-
-      const contactId = await createContact(referrerDetails);
-      await makePayout(contactId, referrerDetails, 1000);
-
-      console.log("Tokens sent and ₹1000 payout made to the referrer.");
-    } catch (error) {
-      console.log("error occured");
-    }
-  };
+  
 
   const accountChanged = (accountName) => {
     getUserBalance(accountName); // Get balance after setting the account
@@ -420,6 +376,7 @@ export const TransactionsProvider = ({ children }) => {
   };
 
   const sendTokens = async () => {
+    console.log('fetchedamount',fetchedAmount)
     try {
       if (ethereum) {
         const { addressTo1, amount1, message } =
@@ -447,9 +404,11 @@ export const TransactionsProvider = ({ children }) => {
         );
         console.log(`Loading - ${transactionHash1.hash}`);
         await transactionHash1.wait();
-        setTokenTxn(true)
         await handleTokenTxnChange();
         console.log(`Success - ${transactionHash1.hash}`);
+        setTokenTxn(true)
+        alert("TEMZ tokens sent successfully!")
+
 
        const transactionsCount =
          await transactionsContract.getTransactionCount();
@@ -461,64 +420,14 @@ export const TransactionsProvider = ({ children }) => {
      }
    } catch (error) {
      setTokenTxn(false);
-     console.log(error);
+     alert(error.message)
+     console.log(error.message);
      throw new Error("Transaction failed");
    }
  };
 
 
  
-
-    // const sendTransaction = async () => {
-    //   try {
-    //     if (ethereum) {
-    //       const { addressTo1, amount1, message } = formData; // Updated to include different amounts
-    //       const transactionsContract = createEthereumContract();
-    //       const parsedAmount1 = ethers.utils.parseEther(amount1); // Parse amount for the first address
-
-    //       // Send to the first address
-    //       await ethereum.request({
-    //         method: "eth_sendTransaction",
-    //         params: [
-    //           {
-    //             from: currentAccount,
-    //             to: addressTo1, // First recipient
-    //             gas: "0x5208",
-    //             value: parsedAmount1._hex,
-    //           },
-    //         ],
-    //       });
-
-    //       const transactionHash1 = await transactionsContract.addToBlockchain(
-    //         addressTo1,
-    //         parsedAmount1,
-    //         message
-    //       );
-    //       console.log(`Loading - ${transactionHash1.hash}`);
-    //       await transactionHash1.wait();
-    //       setTokenTxn(true);
-    //       await handleTokenTxnChange();
-    //       console.log(`Success - ${transactionHash1.hash}`);
-
-    //       // if(TokenTxn) await createPayoutApi()
-
-    //       console.log("Tokens sent and ₹1000 payout made to the referrer.");
-
-    //       const transactionsCount =
-    //         await transactionsContract.getTransactionCount();
-    //       setTransactionCount(transactionsCount.toNumber());
-    //       window.location.reload();
-    //     } else {
-    //       console.log("No ethereum object");
-    //     }
-    //   } catch (error) {
-    //     setTokenTxn(false);
-    //     console.log(error);
-    //     throw new Error("Transaction failed");
-    //   }
-    // };
-
-
    const sendTransaction = async () => {
      try {
        if (ethereum) {
@@ -593,6 +502,14 @@ export const TransactionsProvider = ({ children }) => {
 
 
 
+  
+
+
+
+
+
+
+
   useEffect(() => {
     checkIfWalletIsConnect();
     checkIfTransactionsExists();
@@ -612,6 +529,7 @@ export const TransactionsProvider = ({ children }) => {
         sendTokens,
         handleChange,
         formData,
+
       }}
     >
       {children}

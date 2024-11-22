@@ -32,6 +32,7 @@ const App = () => {
           method: "eth_requestAccounts",
         });
         setAccount(accounts[0]);
+        localStorage.setItem("address",account);
 
         const contractInstance = new web3Instance.eth.Contract(
           CONTRACT_ABI,

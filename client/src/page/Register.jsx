@@ -35,6 +35,7 @@ const Registration = () => {
 
   const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
   const navigate = useNavigate();
+  localStorage.setItem("address",currentAccount);
 
   
   useEffect(() => {
@@ -60,7 +61,7 @@ const Registration = () => {
 
   const handleCheck = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/check-random-id", {
+      const response = await fetch("http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/check-random-id", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +117,7 @@ const Registration = () => {
       newId = generateRandomId(10);
 
       try {
-        const response = await fetch("https://cryptowallet-2.onrender.com/api/check-random-id", {
+        const response = await fetch("http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/check-random-id", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -144,7 +145,7 @@ const Registration = () => {
 
   const sendRandomIdToBackend = async (id) => {
     try {
-      const response = await fetch("https://cryptowallet-2.onrender.com/api/save-random-id", {
+      const response = await fetch("http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/save-random-id", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

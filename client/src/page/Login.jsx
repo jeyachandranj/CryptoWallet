@@ -17,7 +17,7 @@ const Login = () => {
     // Fetch the total registrations from the API when the component mounts
     const fetchTotalRegistrations = async () => {
       try {
-        const response = await fetch("https://cryptowallet-2.onrender.com/api/total-registrations");
+        const response = await fetch("http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/total-registrations");
         const data = await response.json();
         setTotalRegistrations(data.total); // Update state with the total count
       } catch (error) {
@@ -30,7 +30,7 @@ const Login = () => {
 
   const handleCheck = async (id) => {
     try {
-      const response = await fetch("https://cryptowallet-2.onrender.com/api/check-random-id", {
+      const response = await fetch("http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/check-random-id", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,6 +54,30 @@ const Login = () => {
     handleCheck(userReference_id);
     if (userReference_id === reference_id) {
       navigate("/logindashboard", { state: { randomId: userReference_id } });
+    }
+    localStorage.setItem("rootID",userReference_id)
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [password, setPassword] = useState('');
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Submitted Password:', password);
+    if(password == "vaishnav@123")
+    {
+      navigate("/admin");
+    }
+    else{
+      togglePopup();
     }
   };
   
@@ -79,10 +103,43 @@ const Login = () => {
             </div>
           </div>
           <img
-            src={logo}
-            alt="The Rich Crowd Icon"
-            className="h-24 mt-4 md:mt-0"
-          />
+        src={logo}
+        alt="The Rich Crowd Icon"
+        className="h-24 mt-4 md:mt-0 cursor-pointer"
+        onClick={togglePopup}
+      />
+
+{isOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-8 rounded-lg shadow-lg text-white">
+            <h2 className="text-xl mb-4">Enter Password</h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="password"
+                placeholder="Your Password"
+                value={password}
+                onChange={handlePasswordChange}
+                className="border border-white rounded p-2 mb-4 w-full text-black"
+              />
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-white text-black px-4 py-2 rounded mr-2"
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  className="bg-white text-black px-4 py-2 rounded"
+                  onClick={togglePopup}
+                >
+                  Close
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
         </section>
 
         {/* Account Preview Section */}

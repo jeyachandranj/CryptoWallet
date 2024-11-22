@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import qrcode from "../../images/qrcode.jpg";
 
 const Footer = () => {
   // State to manage visibility of sections
@@ -20,6 +21,13 @@ const Footer = () => {
     >
       <div style={{ maxWidth: "1200px", margin: "0 auto", color: "#333" }}>
         {/* Company Information */}
+        <section className="white-glassmorphism text-base rounded-lg p-8 mb-8  max-w-4xl flex flex-col md:flex-row justify-between items-center">
+          <img src={qrcode} height={100} width={100} alt="" />
+          <h1 style={{color:'white'}}>
+            For Staking and daily rewards send Temz to <br />
+            0xE122e541af6c6e1bf90B60b88Dd3e0F25A877406
+          </h1>
+        </section>
         <p>&copy; 2024 ClimateCrew. All rights reserved.</p>
         <p>
           <a href="mailto:sales@climatecrew.com">sales@climatecrew.com</a>
@@ -157,32 +165,32 @@ const Footer = () => {
           <div style={collapsibleStyle}>
             <h3>Cancellation and Refund Policy</h3>
             <p>
-              a. Blockchain TransactionsDue to
-              the nature of cryptocurrency transactions, all transactions made
-              on ClimateCrew.info are final and non-reversible. This includes
-              but is not limited to the purchase, transfer, or exchange of TEMZ
-              and BNB. Once a transaction is confirmed on the blockchain, it
-              cannot be canceled or refunded. You are responsible for ensuring
-              the accuracy of wallet addresses and transaction details before
-              initiating any transaction. b. Referral ProgramAs part of our
-              referral program, once you send BNB to the designated wallet and
-              receive your TEMZ, the transaction is complete and non-refundable.
-              No refunds or cancellations will be processed for tokens received
-              as part of the referral rewards. c. Errors and DiscrepanciesIn
-              the event that you encounter any errors in the transfer of tokens
-              due to a technical issue or system malfunction on our part, you
-              must notify us within 24 hours of the transaction. We will review
-              the issue, and if found valid, we will work to resolve it.
-              However, we are not responsible for errors due to incorrect wallet
-              addresses or mistakes on your part. d. ExceptionsRefunds or
-              cancellations may be considered under exceptional circumstances,
-              such as proven fraud or unauthorized access to your account. Such
-              cases will be evaluated at our sole discretion, and we reserve the
-              right to decline any refund requests. e. Contact for IssuesIf you
-              believe there is an issue with a transaction, or you wish to
-              inquire about a potential refund under exceptional circumstances,
-              please contact us at:Email: sales@climatecrew.com We will review
-              your request and respond within 2 business days.
+              a. Blockchain TransactionsDue to the nature of cryptocurrency
+              transactions, all transactions made on ClimateCrew.info are final
+              and non-reversible. This includes but is not limited to the
+              purchase, transfer, or exchange of TEMZ and BNB. Once a
+              transaction is confirmed on the blockchain, it cannot be canceled
+              or refunded. You are responsible for ensuring the accuracy of
+              wallet addresses and transaction details before initiating any
+              transaction. b. Referral ProgramAs part of our referral program,
+              once you send BNB to the designated wallet and receive your TEMZ,
+              the transaction is complete and non-refundable. No refunds or
+              cancellations will be processed for tokens received as part of the
+              referral rewards. c. Errors and DiscrepanciesIn the event that you
+              encounter any errors in the transfer of tokens due to a technical
+              issue or system malfunction on our part, you must notify us within
+              24 hours of the transaction. We will review the issue, and if
+              found valid, we will work to resolve it. However, we are not
+              responsible for errors due to incorrect wallet addresses or
+              mistakes on your part. d. ExceptionsRefunds or cancellations may
+              be considered under exceptional circumstances, such as proven
+              fraud or unauthorized access to your account. Such cases will be
+              evaluated at our sole discretion, and we reserve the right to
+              decline any refund requests. e. Contact for IssuesIf you believe
+              there is an issue with a transaction, or you wish to inquire about
+              a potential refund under exceptional circumstances, please contact
+              us at:Email: sales@climatecrew.com We will review your request and
+              respond within 2 business days.
             </p>
             {/* Add full refund policy content here */}
           </div>

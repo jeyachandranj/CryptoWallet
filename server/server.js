@@ -40,16 +40,93 @@ const registrationSchema = new mongoose.Schema({
   email: { type: String, required: true }, // Add email field
   mobileNumber: { type: String, required: true }, // Add mobileNumber field
   paymentMethod: { type: String, required: true },
-  accountHolderName: { type: String, required: true },
-  linkedMobileNumber: { type: String, required: true },
+  // accountHolderName: { type: String, required: true },
+  // linkedMobileNumber: { type: String, required: true },
   Referalid: { type: String, required: true },
   randomId: { type: String, unique: true, required: true },
+  address: { type: String, unique: true, required: true },  // Make account unique
   TokenTxn: { type: Boolean, default: false },
 });
 
 
 
 const Registration = mongoose.model('Registration', registrationSchema);
+
+const formSchema = new mongoose.Schema({
+  walletId:String,
+  walletaddress: String,
+  binary: String,
+  matrix: String,
+});
+const FormData = mongoose.model('FormData', formSchema);
+
+
+// app.put('/submit', async (req, res) => {
+
+//   try {
+//     const newFormData = new FormData(req.body);
+//     await newFormData.updateOne(walletId)
+//     res.status(201).send({ message: 'Form data saved successfully' });
+//   } catch (error) {
+//     res.status(500).send({ error: 'Error saving form data' });
+//   }
+// });
+
+app.put('/submit', async (req, res) => {
+  const { walletId, ...updatedData } = req.body;
+
+  try { 
+    // Check if walletId exists in the request
+    if (!walletId) {
+      return res.status(400).send({ error: 'walletId is required' });
+    }
+
+    // Update the existing document based on walletId
+    const updatedFormData = await FormData.findOneAndUpdate(
+      { walletId },  // Filter: Find the document by walletId
+      { $set: updatedData },  // Update: Overwrite the existing fields with new data
+      { new: true, upsert: true } // Return the updated document; if it doesn't exist, create it
+    );
+
+    if (!updatedFormData) {
+      return res.status(404).send({ error: 'No form data found for the given walletId' });
+    }
+
+    res.status(200).send({ message: 'Form data updated successfully', data: updatedFormData });
+  } catch (error) {
+    console.error('Error updating form data:', error);
+    res.status(500).send({ error: 'Error updating form data' });
+  }
+});
+
+
+// app.get('/getAllData', async (req, res) => {
+//   try {
+//     const data = await FormData.find();
+//     res.status(200).json(data);
+//   } catch (error) {
+//     console.error('Error fetching form data:', error);
+//     res.status(500).json({ message: 'Error fetching form data' });
+//   }
+// });
+
+app.get('/getLastUpdatedData', async (req, res) => {
+  try {
+    const lastUpdatedData = await FormData.findOne().sort({ _id: -1 });
+
+    if (!lastUpdatedData) {
+      return res.status(404).json({ message: 'No data found' });
+    }
+
+    res.status(200).json(lastUpdatedData);
+  } catch (error) {
+    console.error('Error fetching last updated form data:', error);
+    res.status(500).json({ message: 'Error fetching form data' });
+  }
+});
+
+
+
 
 // Check if the randomId or Account already exists
 app.post("/api/check-random-id", async (req, res) => {
@@ -301,11 +378,11 @@ app.get("/api/getDetails", async (req, res) => {
 
 //save the user Details
 app.post('/api/register', async (req, res) => {
-  const { name, email, mobileNumber, paymentMethod, accountHolderName, linkedMobileNumber, Referalid, randomId } = req.body;
+  const { name, email, mobileNumber, paymentMethod, Referalid, randomId,address } = req.body;
 
   try {
     // Check if the mobile number already exists
-    const existingUser = await Registration.findOne({ linkedMobileNumber });
+    const existingUser = await Registration.findOne({ mobileNumber });
     if (existingUser) {
       return res.status(400).json({ message: 'Linked Mobile Number already exists!' });
     }
@@ -316,10 +393,9 @@ app.post('/api/register', async (req, res) => {
       email,
       mobileNumber,
       paymentMethod,
-      accountHolderName,
-      linkedMobileNumber,
       Referalid,
-      randomId
+      randomId,
+      address
     });
 
     await newRegistration.save();
@@ -366,6 +442,8 @@ app.get("/api/dashboard", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
 
 
 

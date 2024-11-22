@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaLessThan } from "react-icons/fa";
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     paymentMethod: "",
-    accountHolderName: "",
-    linkedMobileNumber: "",
-    name: "", // New field for name
-    email: "", // New field for email
-    mobileNumber: "", // New field for mobile number
+    name: "", 
+    email: "", 
+    mobileNumber: "", 
   });
   const navigate = useNavigate();
 
@@ -22,17 +21,23 @@ const RegistrationForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault(); 
     const Referalid = localStorage.getItem('ReferalId');
-    const randomId = localStorage.getItem("randomId")
-
+    let randomId = localStorage.getItem("randomId")
+    const address = localStorage.getItem("address");
+    localStorage.setItem("method",formData.paymentMethod);
+    if (formData.paymentMethod === 'binary') {
+      randomId = randomId;
+    } else if (formData.paymentMethod === 'matrix') {
+      randomId = `m_${randomId}`;
+    }
     const finalFormData = {
       ...formData,
       Referalid, // Add the ReferalId from localStorage
-      randomId
+      randomId,
+      address
     };
-
-    axios.post('https://cryptowallet-2.onrender.com/api/register', finalFormData)
+    axios.post('http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/register', finalFormData)
       .then(response => {
         console.log(response.data);
         alert("Registration successful!");
@@ -93,7 +98,14 @@ const RegistrationForm = () => {
               </div>
 
               {/* Email */}
-              <div className="mb-6">
+             
+             
+            </div>
+
+            {/* Right Column */}
+            <div>
+
+            <div className="mb-6">
                 <label className="block text-white-700 font-semibold mb-2" htmlFor="email">
                   Email *
                 </label>
@@ -108,15 +120,10 @@ const RegistrationForm = () => {
                   className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
-             
-            </div>
-
-            {/* Right Column */}
-            <div>
               
               <div className="mb-6">
                 <label className="block text-white-700 font-semibold mb-2" htmlFor="paymentMethod">
-                  Select Payment Method *
+                  Select Method *
                 </label>
                 <select
                   id="paymentMethod"
@@ -126,15 +133,14 @@ const RegistrationForm = () => {
                   required
                   className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
-                  <option value="">Choose a payment method</option>
-                  <option value="GPAY">GPAY</option>
-                  <option value="PHONEPE">PHONEPE</option>
-                  <option value="PAYTM">PAYTM</option>
+                  <option value="">Choose method</option>
+                  <option value="binary">X2 Program</option>
+                  <option value="matrix">X3 Program</option>
                 </select>
               </div>
 
               {/* Account Holder Name */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <label className="block text-white-700 font-semibold mb-2" htmlFor="accountHolderName">
                   Account Holder Name *
                 </label>
@@ -151,7 +157,7 @@ const RegistrationForm = () => {
               </div>
 
               {/* Linked Mobile Number */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <label className="block text-white-700 font-semibold mb-2" htmlFor="linkedMobileNumber">
                   Linked Mobile Number *
                 </label>
@@ -165,7 +171,7 @@ const RegistrationForm = () => {
                   placeholder="Enter your linked mobile number"
                   className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
-              </div>
+              </div> */} 
             </div>
           </div>
 
