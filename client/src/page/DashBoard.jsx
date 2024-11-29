@@ -45,7 +45,7 @@ const DashBoard = () => {
         setAccount(currentAccount);
 
         const response = await axios.get(
-          "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/getDetails",
+          "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:4000/api/getDetails",
           {
             params: { randomId }, // Pass randomId as query parameters
           }

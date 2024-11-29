@@ -10,7 +10,7 @@ const ReferralTree = () => {
      const fetchData = async () => {
        try {
          const response = await fetch(
-           `http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:5000/api/getDetails?randomId=${randomId}`
+           `http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:4000/api/getDetails?randomId=${randomId}`
          );
 
          if (!response.ok) {
