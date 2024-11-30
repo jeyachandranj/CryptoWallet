@@ -17,7 +17,7 @@ const Login = () => {
     // Fetch the total registrations from the API when the component mounts
     const fetchTotalRegistrations = async () => {
       try {
-        const response = await fetch("http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:80/api/total-registrations");
+        const response = await fetch("https://cryptowallet-2.onrender.com/api/total-registrations");
         const data = await response.json();
         setTotalRegistrations(data.total); // Update state with the total count
       } catch (error) {
@@ -30,7 +30,7 @@ const Login = () => {
 
   const handleCheck = async (id) => {
     try {
-      const response = await fetch("http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:80/api/check-random-id", {
+      const response = await fetch("https://cryptowallet-2.onrender.com/api/check-random-id", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

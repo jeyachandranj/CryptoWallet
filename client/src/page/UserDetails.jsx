@@ -37,7 +37,7 @@ const RegistrationForm = () => {
       randomId,
       address
     };
-    axios.post('http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:80/api/register', finalFormData)
+    axios.post('https://cryptowallet-2.onrender.com/api/register', finalFormData)
       .then(response => {
         console.log(response.data);
         alert("Registration successful!");

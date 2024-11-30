@@ -292,7 +292,7 @@ export const TransactionsProvider = ({ children }) => {
     const fetchAccountDetails = async () => {
       try {
         const response = await fetch(
-          "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:80/api/account"
+          "https://cryptowallet-2.onrender.com/api/account"
         );
         const data = await response.json();
         setReference_id(data.referralId);
@@ -307,7 +307,7 @@ export const TransactionsProvider = ({ children }) => {
    const getAllData = async () => {
      try {
        const response = await axios.get(
-         "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:80/getalldata"
+         "https://cryptowallet-2.onrender.com/getalldata"
        );
        console.log(response.data); // Logs the actual data from the response
        setFetchedamount(response.data[0].matrix)
@@ -326,7 +326,7 @@ export const TransactionsProvider = ({ children }) => {
   const handleTokenTxnChange = async () => {
     try {
       const response = await fetch(
-        "http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:80/storeTokenTxn",
+        "https://cryptowallet-2.onrender.com/storeTokenTxn",
         {
           method: "POST",
           headers: {

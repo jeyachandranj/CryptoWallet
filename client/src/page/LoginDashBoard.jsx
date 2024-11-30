@@ -26,7 +26,7 @@ const LoginDashBoard = () => {
         setAccount(currentAccount);
 
         const response = await fetch(
-          `http://ec2-13-126-194-20.ap-south-1.compute.amazonaws.com:80/api/getDetails?randomId=${randomId}`
+          `https://cryptowallet-2.onrender.com/api/getDetails?randomId=${randomId}`
         );
         console.log("responselogin", response);
 
