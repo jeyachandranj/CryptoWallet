@@ -40,6 +40,7 @@ const Login = () => {
 
       const data = await response.json();
       console.log("data",data);
+      localStorage.setItem('login', 'true'); 
 
       if (data.exists) {
         setReference_id(id.trim());
