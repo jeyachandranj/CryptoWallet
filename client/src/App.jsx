@@ -9,7 +9,7 @@ import ReferralTree from './page/RefferalTree.jsx';
 import UserDetails from './page/UserDetails.jsx';
 import LoginDashBoard from './page/LoginDashBoard.jsx';
 import Admin from './page/Admin.jsx';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute.jsx';
 
 function App() {
     return (
