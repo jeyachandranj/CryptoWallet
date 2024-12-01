@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const Razorpay = require('razorpay')
 const axios = require('axios')
+const nodemailer = require('nodemailer');
+
 const app = express();
 
 app.use(express.json());
@@ -449,6 +451,45 @@ app.get("/api/dashboard", async (req, res) => {
   }
 });
 
+//2fv
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'jeyachandran72jj@gmail.com',
+    pass: 'gdjh zmqn wrsa daue',
+  },
+});
+
+app.post('/api/send-otp', (req, res) => {
+  const { email } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  const mailOptions = {
+    from: 'jeyachandran72jj@gmail.com',
+    to: email,
+    subject: 'Your OTP Code',
+    text: `Dear User,
+
+    Your OTP code for verifying your account on ClimateCrew is: ${otp}. This code is part of the two-factor authentication process for securing your wallet.
+    
+    Please enter the OTP on the ClimateCrew website to complete the verification process. If you did not initiate this request, please ignore this email.
+    
+    Thank you for using ClimateCrew to manage your wallet securely!
+    
+    Best regards,  
+    The ClimateCrew Team`
+      };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error:', error); // Logs full error details
+      return res.status(500).json({ error: 'Error sending email', details: error.message });
+    }
+    res.status(200).json({ otp });
+  });
+  
+});
 
 
 

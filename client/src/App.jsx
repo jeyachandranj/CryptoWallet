@@ -10,6 +10,7 @@ import UserDetails from './page/UserDetails.jsx';
 import LoginDashBoard from './page/LoginDashBoard.jsx';
 import Admin from './page/Admin.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
+import EmailOTPVerification from './components/EmailOTPVerification.jsx';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/referralTree" element={<ReferralTree />} />
                 <Route path="/dashboard" element={<DashBoard />} />
                 <Route path="/userDetails" element={<UserDetails />} />
+                <Route path='/email-otp' element={<EmailOTPVerification/>}/>
                 <Route path="/logindashboard" element={<PrivateRoute element={<LoginDashBoard />} />} />
                 <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
             </Routes>

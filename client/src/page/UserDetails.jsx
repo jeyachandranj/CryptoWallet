@@ -41,7 +41,8 @@ const RegistrationForm = () => {
       .then(response => {
         console.log(response.data);
         alert("Registration successful!");
-        navigate('/dashboard');
+        // navigate('/dashboard');
+        navigate('/email-otp', { state: { email: formData.email } });
       })
       .catch(error => {
         if (error.response && error.response.status === 400) {
