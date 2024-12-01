@@ -8,6 +8,7 @@ import DashBoard from './page/DashBoard.jsx';
 import ReferralTree from './page/RefferalTree.jsx';
 import UserDetails from './page/UserDetails.jsx';
 import LoginDashBoard from './page/LoginDashBoard.jsx';
+import OtpVerification from './page/OtpVerification.jsx';
 import Admin from './page/Admin.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import EmailOTPVerification from './components/EmailOTPVerification.jsx';
