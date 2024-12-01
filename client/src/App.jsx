@@ -8,6 +8,7 @@ import DashBoard from './page/DashBoard.jsx'
 import ReferralTree from './page/RefferalTree.jsx';
 import UserDetails from './page/UserDetails.jsx';
 import LoginDashBoard from './page/LoginDashBoard.jsx';
+import OtpVerification from './page/OtpVerification.jsx';
 import Admin from './page/Admin.jsx';
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path='/dashboard' element={<DashBoard/>}/>
                 <Route path='/userDetails' element={<UserDetails/>}/>
                 <Route path='/logindashboard' element={<LoginDashBoard/>}/>
+                <Route path='/otpverification' element={<OtpVerification/>}/>
                 <Route path='/admin' element={<Admin/>}/>
             </Routes>
         </BrowserRouter>
