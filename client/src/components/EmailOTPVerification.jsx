@@ -1,45 +1,38 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const EmailOTPVerification = () => {
-  const [otp, setOtp] = useState(Array(6).fill(""));
+function EmailOTPVerification() {
+  const [otp, setOtp] = useState("");
+  const [sentOtp, setSentOtp] = useState(null);
+  const location = useLocation();
+  const email = location.state?.email || "";
   const navigate = useNavigate();
 
-  const handleOtpChange = (value, index) => {
-    const updatedOtp = [...otp];
-    updatedOtp[index] = value.slice(0, 1); // Ensure only one digit is entered
-    setOtp(updatedOtp);
-
-    // Automatically focus on the next input
-    if (value && index < otp.length - 1) {
-      const nextInput = document.getElementById(`otp-${index + 1}`);
-      nextInput && nextInput.focus();
+  const sendOtpToEmail = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/send-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+      setSentOtp(data.otp); // Store OTP temporarily (for testing, replace this in prod)
+      alert("OTP sent to your email!");
+    } catch (error) {
+      console.error("Error sending OTP:", error);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleOtpSubmit = (e) => {
     e.preventDefault();
-    const fullOtp = otp.join("");
-    if (fullOtp.length !== otp.length) {
-      alert("Please enter the complete OTP");
-      return;
+    if (otp === sentOtp) {
+      alert("OTP verified successfully!");
+      navigate("/dashboard"); // Navigate to the next page
+    } else {
+      alert("Invalid OTP. Please try again.");
     }
-    
-    console.log(otp)
-    axios
-      .post("https://cryptowallet-production-6a04.up.railway.app", {
-        otp: fullOtp,
-      })
-      .then((response) => {
-        console.log(response.data);
-        alert("OTP verified successfully!");
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        console.error("Error verifying OTP:", error);
-        alert("Invalid OTP. Please try again.");
-      });
   };
 
   return (
@@ -48,20 +41,36 @@ const EmailOTPVerification = () => {
         <h2 className="text-3xl font-bold text-center text-white-800 mb-8">
           Verify Email
         </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="flex justify-center mb-6 space-x-2">
-            {otp.map((digit, index) => (
+        <p>{email}</p>
+        <form onSubmit={handleOtpSubmit}>
+          <div className="flex md:grid-cols-2 gap-6">
+            {/* Left Column */}
+            <div className="mb-6 w-full flex items-center">
+              <label
+                className="block text-white-700 font-semibold mb-2 mr-4"
+                htmlFor="otp"
+              >
+                Otp *
+              </label>
               <input
-                key={index}
-                id={`otp-${index}`}
-                type="mobilenumber"
-                value={digit}
-                onChange={(e) => handleOtpChange(e.target.value, index)}
-                maxLength="1"
-                className="w-12 h-12 text-center text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                type="text"
+                id="otp"
+                name="otp"
+                onChange={(e) => setOtp(e.target.value)}
+                required
+                placeholder="Enter your Otp"
+                className="w-2/3 px-4 py-3 text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-            ))}
+              <button
+                type="button"
+                onClick={sendOtpToEmail}
+                className="bg-[#2952e3] py-2 px-6 ml-4 rounded-lg cursor-pointer hover:bg-[#2546bd] text-white"
+              >
+                Send Otp
+              </button>
+            </div>
           </div>
+
           <div className="flex justify-center items-center">
             <button
               type="submit"
@@ -74,6 +83,6 @@ const EmailOTPVerification = () => {
       </div>
     </div>
   );
-};
+}
 
 export default EmailOTPVerification;
